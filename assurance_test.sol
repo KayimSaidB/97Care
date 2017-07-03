@@ -1,8 +1,13 @@
+
 pragma solidity ^0.4.11;
 contract assurance_test{
     
     uint256 prix=500000;
     uint256 tresorerie=0;
+    uint [3] tableauprix;
+    function initialiser_prix(uint [3]tableau_prix){
+        tableauprix=tableau_prix;
+    }
     
    
     mapping (address => bool[3]) registre_assure; /// indique si une personne est dans le registre
@@ -21,9 +26,11 @@ contract assurance_test{
         else 
         return false;
         }
+        event show(bytes32 message);
     function ajouter_specialiste(address nouveau){
-        
+        bytes32 message="Love is the answer";
         registre_specialiste[nouveau]=true;
+        show(message);
     }
 
     struct un_sinistre{
@@ -55,9 +62,9 @@ contract assurance_test{
         return choix;
     }
     function cotisation(uint choix_assurance) payable returns (bool){
-    if (compte_assure[msg.sender]>=prix){
-        tresorerie+=prix;
-        compte_assure[msg.sender]-=prix;
+    if (compte_assure[msg.sender]>=tableauprix[choix_assurance]){
+        tresorerie+=tableauprix[choix_assurance];
+        compte_assure[msg.sender]-=tableauprix[choix_assurance];
         registre_assure[msg.sender][choix_assurance]=true;
         return true;
     }
@@ -81,11 +88,6 @@ contract assurance_test{
     }
 
 
-    
-    
-    
-    
-    
     
     
     
