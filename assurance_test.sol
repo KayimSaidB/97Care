@@ -1,15 +1,16 @@
 pragma solidity ^0.4.11;
 contract assurance_test{
     
-    uint256 prix=5000;
+    uint256 prix=500000;
     uint256 tresorerie=0;
     
    
     mapping (address => bool[3]) registre_assure; /// indique si une personne est dans le registre
-    mapping (address => uint256) compte_assure;
-    mapping (address => bool) registre_specialiste; // registre des personnes qui valident
-    /// les déclarations de sinistre
     /// tableau de boolens pour indiquer si elle a payé ses droits , on peut imaginer un tableau plus grand
+
+    mapping (address => uint256) compte_assure; /// permet à l'assuré d'avoir un compte avec lequel il peut souscrire a une assurance et se faire rembourser 
+    mapping (address => bool) registre_specialiste; // registre des personnes qui peuvent valider une déclartion de sinistre
+    /// les déclarations de sinistre
     // pour gérer différents types de prestations
     function adhesion() returns (bool){
     
@@ -70,11 +71,13 @@ contract assurance_test{
         return tresorerie;
     }
 
-    function declaration_sinistre_apres_validation(uint reference_sinistre){
+    function declaration_sinistre_apres_validation(uint reference_sinistre) returns (bool){
     if (registre_sinistre[reference_sinistre].est_valide==true && tresorerie>=registre_sinistre[reference_sinistre].valeur_sinistre){
         compte_assure[msg.sender]+=registre_sinistre[reference_sinistre].valeur_sinistre;
         tresorerie-=registre_sinistre[reference_sinistre].valeur_sinistre;
+        return true;
     }
+    return false;
     }
 
 
